@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en" ng-app="foodMeApp">
+<head>
+  <meta charset="utf-8">
+  <title>FoodMe</title>
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="css/bootstrap-united.css">
+
+<!-- Matomo -->
+<script type="text/javascript">
+
+
+// Link for privacy policy example https://www.iubenda.com/en/help/3592-full-piwik-integration-guide
+var _paq = _paq || [];
+var currentUrl = location.href;
+
+window.addEventListener('hashchange', function() {
+	console.log(url.substring(url.lastIndexOf("/") + 1, url.length));
+    _paq.push(['setReferrerUrl', currentUrl]);
+     currentUrl = '' + window.location.hash.substr(1);
+    _paq.push(['setCustomUrl', currentUrl]);
+ //   _paq.push(['setDocumentTitle', document.domain + "/" + document.title]);
+    _paq.push(['setDocumentTitle', document.domain + "/" + url.substring(url.lastIndexOf("/") + 1, url.length)]);
+	_paq.push(['trackEvent', 'Click', 'NavBar', url.substring(url.lastIndexOf("/") + 1, url.length)]);
+
+
+    // remove all previously assigned custom variables, requires Matomo (formerly Piwik) 3.0.2
+    _paq.push(['deleteCustomVariables', 'page']); 
+    _paq.push(['setGenerationTimeMs', 0]);
+    _paq.push(['trackPageView']);
+
+    // make Matomo aware of newly added content
+    var content = document.getElementById('content');
+    _paq.push(['MediaAnalytics::scanForMedia', content]);
+    _paq.push(['FormAnalytics::scanForForms', content]);
+    _paq.push(['trackContentImpressionsWithinNode', content]);
+    _paq.push(['enableLinkTracking']);
+});
+
+
+	var url = location.href;
+
+  
+  _paq.push(["setDocumentTitle", document.domain + "/" + url.substring(url.lastIndexOf("/") + 1, url.length)]);
+  _paq.push(['trackEvent', 'Click', 'NavBar', url.substring(url.lastIndexOf("/") + 1, url.length)]);
+  	console.log(url.substring(url.lastIndexOf("/") + 1, url.length));
+
+  
+
+ 
+  // customise tracking of downloading files - specify extensions to be tracked	
+  _paq.push(['setDownloadExtensions', "jpg|png|gif"]);
+  
+  _paq.push(['trackPageView']);
+  
+  _paq.push(['trackVisibleContentImpressions', true, 750]);
+
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="//localhost:8070/";
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', '2']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+  })();
+
+
+
+
+
+</script>
+<noscript><p><img src="//localhost:8070/piwik.php?idsite=2&amp;rec=1" style="border:0;" alt="" /></p></noscript>
+<!-- End Matomo Code -->
+
+
+
+</head>
+<body onload="enterUserID()">
+
+<div class="container">
+
+  <div class="navbar" ng-controller="NavbarController">
+    <div class="navbar-inner">
+      <a class="brand" href="#/">FoodMe</a>
+      <ul class="nav">
+        <li ng-class="{active: routeIs('/')}"><a href="#/">Home</a></li>
+        <li ng-class="{active: routeIs('/how-it-works')}"><a href="#/how-it-works">How it works</a></li>
+        <li ng-class="{active: routeIs('/who-we-are')}"><a href="#/who-we-are">Who we are</a></li>
+      </ul>
+
+      <ul class="nav pull-right">
+        <li ng-class="{active: routeIs('/help')}"><a href="#/help">Help</a></li>
+      </ul>
+    </div>
+  </div>
+
+
+  <ng-view></ng-view>
+
+</div>
+
+<div class="search-container">
+    <form action="#">
+      <input type="text" placeholder="Search.." name="search">
+      <button type="submit"><i class="fa fa-search"></i></button>
+    </form>
+  </div>
+
+<div>
+<iframe
+        style="border: 0; height: 200px; width: 600px;"
+        src="http://localhost:8070/index.php?module=CoreAdminHome&action=optOut&language=en&backgroundColor=&fontColor=&fontSize=&fontFamily="
+        ></iframe>
+</div>
+
+<script>			console.log(window.location.hash.substr(1));
+			console.log(location.href);
+</script>
+
+<script>
+var userID;
+function enterUserID() {
+	var userID = prompt("User ID:");
+	if (userID == null || userID == "") {
+		userID = "anon";
+	}
+}
+</script>
+
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular-resource.min.js"></script>
+
+<script src="lib/angular/angular.js"></script>
+<script src="lib/angular/angular-resource.js"></script>
+<script src="js/app.js"></script>
+<script src="js/controllers/CheckoutController.js"></script>
+<script src="js/controllers/CustomerController.js"></script>
+<script src="js/controllers/MenuController.js"></script>
+<script src="js/controllers/NavbarController.js"></script>
+<script src="js/controllers/RestaurantsController.js"></script>
+<script src="js/controllers/ThankYouController.js"></script>
+<script src="js/directives/fmDeliverTo.js"></script>
+<script src="js/directives/fmCheckboxList.js"></script>
+<script src="js/directives/fmRating.js"></script>
+<script src="js/services/alert.js"></script>
+<script src="js/services/customer.js"></script>
+<script src="js/services/localStorage.js"></script>
+<script src="js/services/cart.js"></script>
+<script src="js/services/Restaurant.js"></script>
+
+</body>
+</html>
