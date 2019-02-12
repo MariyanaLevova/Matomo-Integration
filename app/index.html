@@ -10,26 +10,55 @@
 <script type = "text/javascript" >
 	var userID;
 	var _paq = _paq || [];
+	var currentUrl = location.href;
 
+	// prompt for user ID and assign as anonymous if none entered
 	function enterUserID() {
 		userID = prompt("User ID:");
 		if (userID == null || userID == "") {
 			userID = "anon";
 		}
 	}
-	window.onload=enterUserID();
 
 
-	
+		// track and report when a visitor first lands on a page (also assign ID)
+	function trackUserVisit() {
 
-		var currentUrl = location.href;
+			if(window.location.hash.substr(2) == "") { 
+				_paq.push(["setDocumentTitle", document.domain + "/home"]); 
+			} else {
+				_paq.push(["setDocumentTitle", document.domain + "/" + window.location.hash.substr(1)])
+			} 
+
+		_paq.push(['setUserId', userID]);
 		
-		window.addEventListener = ("hashchange", function() {
-			console.log("event listener triggered");
+		// all custom settings must come in before the trackPageView command
+		_paq.push(['trackPageView']);
+		_paq.push(['enableLinkTracking']);
+		(function() {
+			var u = "//localhost:8070/";
+			_paq.push(['setTrackerUrl', u + 'piwik.php']);
+			_paq.push(['setSiteId', '2']);
+			var d = document,
+				g = d.createElement('script'),
+				s = d.getElementsByTagName('script')[0];
+			g.type = 'text/javascript';
+			g.async = true;
+			g.defer = true;
+			g.src = u + 'piwik.js';
+			s.parentNode.insertBefore(g, s);
+		})();
 
-	//		_paq.push(['setReferrerUrl', currentUrl]);
-		//	currentUrl = '' + window.location.hash.substr(1);
-		//	_paq.push(['setCustomUrl', currentUrl]);
+	}
+	
+	
+	// track and report user interactions with page
+	function trackUserInteractions() {
+		console.log("event listener triggered");
+
+			_paq.push(['setReferrerUrl', currentUrl]);
+			currentUrl = '' + window.location.hash.substr(1);
+			_paq.push(['setCustomUrl', currentUrl]);
 	//		_paq.push(['setDocumentTitle', document.domain + "/" + window.location.hash.substr(1)]);
 
 
@@ -45,42 +74,17 @@
 			_paq.push(['deleteCustomVariables', 'page']);
 			_paq.push(['setGenerationTimeMs', 0]);
 			_paq.push(['trackPageView']);
-	});
+	}	
+		
 
 
 
-
-
-
-  if(window.location.hash.substr(2) == "") { 
-	_paq.push(["setDocumentTitle", document.domain + "/home"]); 
-  } else {
-	_paq.push(["setDocumentTitle", document.domain + "/" + window.location.hash.substr(1)])
-	};
-
-
-	//     _paq.push(['setUserId', userID]);
-	_paq.push(['setUserId', userID]);
-	// all custom settings must come in before the trackPageView command
-	_paq.push(['trackPageView']);
-	_paq.push(['enableLinkTracking']);
-	(function() {
-		var u = "//localhost:8070/";
-		_paq.push(['setTrackerUrl', u + 'piwik.php']);
-		_paq.push(['setSiteId', '2']);
-		var d = document,
-			g = d.createElement('script'),
-			s = d.getElementsByTagName('script')[0];
-		g.type = 'text/javascript';
-		g.async = true;
-		g.defer = true;
-		g.src = u + 'piwik.js';
-		s.parentNode.insertBefore(g, s);
-	})();
 
 
 	
-	
+	window.onload=enterUserID(),trackUserVisit();
+	window.addEventListener("hashchange",trackUserInteractions());
+	window.onhashchange(trackUserInteractions());
 
 
 </script>
