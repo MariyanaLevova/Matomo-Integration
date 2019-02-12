@@ -4,7 +4,7 @@ var foodMeApp = angular.module('foodMeApp', ['ngResource']);
 
 foodMeApp.run(function($rootScope) {
     $rootScope.$on("$locationChangeStart", function(event, next, current) { 
-        trackUserInteractions();
+        trackUserInteractions(next);
     });
 });
 

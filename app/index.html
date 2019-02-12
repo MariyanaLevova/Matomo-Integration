@@ -20,19 +20,20 @@
 		}
 	}
 
-
-		// track and report when a visitor first lands on a page (also assign ID)
+	// track and report when a visitor first lands on a page (also assign ID)
 	function trackUserVisit() {
-		console.log("new visitor");
 
-			if(window.location.hash.substr(2) == "") { 
-				_paq.push(["setDocumentTitle", document.domain + "/home"]); 
-			} else {
-				_paq.push(["setDocumentTitle", document.domain + "/" + window.location.hash.substr(1)]);
-			} 
+		// sets the user ID
 		_paq.push(['setUserId', userID]);
-		
-		// all custom settings must come in before the trackPageView command
+
+		// accurately measure the time spent on the last pageview of a visit
+		_paq.push(['enableHeartBeatTimer']);
+
+		_paq.push(["setDocumentTitle", document.domain + window.location.hash.substr(1)]);
+
+		_paq.push(['setCookieDomain', "*.localhost"]);
+
+		/* tracker methods like "setCustomDimension" should be called before "trackPageView" */
 		_paq.push(['trackPageView']);
 		_paq.push(['enableLinkTracking']);
 		(function() {
@@ -48,43 +49,38 @@
 			g.src = u + 'piwik.js';
 			s.parentNode.insertBefore(g, s);
 		})();
-
 	}
-	
 
 	// track and report user interactions with page
-	function trackUserInteractions() {
-		console.log(window.location.hash);
+	function trackUserInteractions(url) {
 
+		var hash = url.substring(url.lastIndexOf("/") + 1, url.length);
+		if (url.substring(url.lastIndexOf("/") + 1, url.length) == "") {
+			_paq.push(['trackEvent', 'NavBar', "home"]);
+			_paq.push(["setDocumentTitle", document.domain + "/home"]);
+		} else {
+			_paq.push(['trackEvent', 'NavBar', hash]);
+			_paq.push(["setDocumentTitle", document.domain + "/" + hash]);
 
+		}
 
-			if (window.location.hash.substr(2) == "") {
-				_paq.push(['trackEvent', 'NavBar', "/home"]);
-				console.log("writing home");
-			} else {
-				_paq.push(['trackEvent', 'NavBar', window.location.hash.substr(1)]);
-				console.log("writing" + " " + window.location.hash.substr(2));
-			}
-	
+		// remove all previously assigned custom variables before the trackPageView command
+		_paq.push(['deleteCustomVariables', 'page']);
+		_paq.push(['setGenerationTimeMs', 0]);
+		_paq.push(['trackPageView']);
+		_paq.push(['trackAllContentImpressions']);
 
+	}
 
-			// remove all previously assigned custom variables before the trackPageView command
-			_paq.push(['deleteCustomVariables', 'page']);
-			_paq.push(['setGenerationTimeMs', 0]);
-			_paq.push(['trackPageView']);
-
-	}	
-
-		
-		enterUserID();
-		trackUserVisit();
-
+	enterUserID();
+	trackUserVisit();
 </script>
       <noscript>
          <p><img src="//localhost:8070/piwik.php?idsite=2&amp;rec=1" style="border:0;" alt="" /></p>
       </noscript>
       <!-- End Matomo Code -->
    </head>
+   
    <body>
       <div class="container">
          <div class="navbar" ng-controller="NavbarController">
@@ -109,10 +105,20 @@
          </form>
       </div>
       <div>
-         <iframe
-            style="border: 0; height: 200px; width: 600px;"
+	  
+	  
+	    <!-- footer -->
+    <footer class="footer">
+    <div class="container">
+    <div class="content has-text-centered">
+		<iframe
+            style="border: 0; height: 200px; width: 500px;"
             src="http://localhost:8070/index.php?module=CoreAdminHome&action=optOut&language=en&backgroundColor=&fontColor=&fontSize=&fontFamily=">
          </iframe>
+    </div>
+    </div>
+    </footer>  
+         
       </div>
       <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular.min.js"></script>
       <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular-resource.min.js"></script>
