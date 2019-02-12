@@ -17,8 +17,6 @@ foodMeApp.controller('RestaurantsController',
   $scope.$watch('filter', filterAndSortRestaurants, true);
 
   function filterAndSortRestaurants() {
-	console.log("filter changed: ");
-	console.log(filter);
     $scope.restaurants = [];
 
     // filter
@@ -88,5 +86,10 @@ foodMeApp.controller('RestaurantsController',
     thai: 'Thai',
     vegetarian: 'Vegetarian'
   };
+  
+  $scope.post = function() {
+	  trackMenuSelections(filter);
+	  return '';
+  }
 
 });

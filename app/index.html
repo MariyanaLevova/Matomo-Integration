@@ -71,6 +71,27 @@
 		_paq.push(['trackAllContentImpressions']);
 
 	}
+	
+	function trackMenuSelections(filter) {
+		var cuisine = filter.cuisine;
+		var price = filter.price;
+		var rating = filter.rating;
+	
+		if(cuisine.length != 0) {
+			for(var i = 0; i < cuisine.length; i++)
+				_paq.push(['trackEvent', 'Restaurant Filter', "Cuisine Choice", cuisine[i]]);
+		}	
+		else console.log("empty");
+		
+		if(price != null) {
+			_paq.push(['trackEvent', 'Restaurant Filter', "Price Rating", price]);
+		}
+		
+		if(rating != null) {
+			_paq.push(['trackEvent', 'Restaurant Filter', "Restaurant Rating", rating]);
+		}
+	}
+	
 
 	enterUserID();
 	trackUserVisit();
