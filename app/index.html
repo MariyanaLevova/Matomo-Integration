@@ -7,101 +7,108 @@
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
       <link rel="stylesheet" href="css/bootstrap-united.css">
       <!-- Matomo -->
-<script type = "text/javascript" >
-	var userID;
-	var _paq = _paq || [];
-	var currentUrl = location.href;
+      <script type = "text/javascript" >
+         var userID;
+         var _paq = _paq || [];
+         var currentUrl = location.href;
+         
+         // prompt for user ID and assign as anonymous if none entered
+         function enterUserID() {
+         	userID = prompt("User ID:");
+         	if (userID == null || userID == "") {
+         		userID = "anon";
+         	}
+         }
+         
+         // track and report when a visitor first lands on a page (also assign ID)
+         function trackUserVisit() {
+         
+         	// sets the user ID
+         	_paq.push(['setUserId', userID]);
+         
+         	// accurately measure the time spent on the last pageview of a visit
+         	_paq.push(['enableHeartBeatTimer']);
+         
+         	_paq.push(["setDocumentTitle", document.domain + window.location.hash.substr(1)]);
+         
+         	_paq.push(['setCookieDomain', "*.localhost"]);
+         	     	
+         	
+         	/* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+         	_paq.push(['trackPageView']);
+         	_paq.push(['enableLinkTracking']);
+         	(function() {
+         		var u = "//localhost:8070/";
+         		_paq.push(['setTrackerUrl', u + 'piwik.php']);
+         		_paq.push(['setSiteId', '2']);
+         		var d = document,
+         			g = d.createElement('script'),
+         			s = d.getElementsByTagName('script')[0];
+         		g.type = 'text/javascript';
+         		g.async = true;
+         		g.defer = true;
+         		g.src = u + 'piwik.js';
+         		s.parentNode.insertBefore(g, s);
+         	})();
+         }
+         
+         // track and report user interactions with page
+         function trackUserInteractions(url) {
+         
+         	var hash = url.substring(url.lastIndexOf("/") + 1, url.length);
+         	if (url.substring(url.lastIndexOf("/") + 1, url.length) == "") {
+         		_paq.push(['trackEvent', 'NavBar', "home"]);
+         		_paq.push(["setDocumentTitle", document.domain + "/home"]);
+         	} else {
+         		_paq.push(['trackEvent', 'NavBar', hash]);
+         		_paq.push(["setDocumentTitle", document.domain + "/" + hash]);
+         
+         	}
+         
+         	// remove all previously assigned custom variables before the trackPageView command
+         	_paq.push(['deleteCustomVariables', 'page']);
+         	_paq.push(['setGenerationTimeMs', 0]);
+         	_paq.push(['trackPageView']);
+         	_paq.push(['trackAllContentImpressions']);
+         
+         }
+         
+         function trackMenuSelections(filter) {
+         	var cuisine = filter.cuisine;
+         	var price = filter.price;
+         	var rating = filter.rating;
+         
+         	if(cuisine.length != 0) {
+         		for(var i = 0; i < cuisine.length; i++)
+         			_paq.push(['trackEvent', 'Restaurant Filter', "Cuisine Choice", cuisine[i]]);
+         	}	
+         	else console.log("empty");
+         	
+         	if(price != null) {
+         		_paq.push(['trackEvent', 'Restaurant Filter', "Price Rating", price]);
+         	}
+         	
+         	if(rating != null) {
+         		_paq.push(['trackEvent', 'Restaurant Filter', "Restaurant Rating", rating]);
+         	}
+         }
+		 
+		function trackDropDownSelection(selection) {
 
-	// prompt for user ID and assign as anonymous if none entered
-	function enterUserID() {
-		userID = prompt("User ID:");
-		if (userID == null || userID == "") {
-			userID = "anon";
-		}
-	}
-
-	// track and report when a visitor first lands on a page (also assign ID)
-	function trackUserVisit() {
-
-		// sets the user ID
-		_paq.push(['setUserId', userID]);
-
-		// accurately measure the time spent on the last pageview of a visit
-		_paq.push(['enableHeartBeatTimer']);
-
-		_paq.push(["setDocumentTitle", document.domain + window.location.hash.substr(1)]);
-
-		_paq.push(['setCookieDomain', "*.localhost"]);
-
-		/* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-		_paq.push(['trackPageView']);
-		_paq.push(['enableLinkTracking']);
-		(function() {
-			var u = "//localhost:8070/";
-			_paq.push(['setTrackerUrl', u + 'piwik.php']);
-			_paq.push(['setSiteId', '2']);
-			var d = document,
-				g = d.createElement('script'),
-				s = d.getElementsByTagName('script')[0];
-			g.type = 'text/javascript';
-			g.async = true;
-			g.defer = true;
-			g.src = u + 'piwik.js';
-			s.parentNode.insertBefore(g, s);
-		})();
-	}
-
-	// track and report user interactions with page
-	function trackUserInteractions(url) {
-
-		var hash = url.substring(url.lastIndexOf("/") + 1, url.length);
-		if (url.substring(url.lastIndexOf("/") + 1, url.length) == "") {
-			_paq.push(['trackEvent', 'NavBar', "home"]);
-			_paq.push(["setDocumentTitle", document.domain + "/home"]);
-		} else {
-			_paq.push(['trackEvent', 'NavBar', hash]);
-			_paq.push(["setDocumentTitle", document.domain + "/" + hash]);
-
-		}
-
-		// remove all previously assigned custom variables before the trackPageView command
-		_paq.push(['deleteCustomVariables', 'page']);
-		_paq.push(['setGenerationTimeMs', 0]);
-		_paq.push(['trackPageView']);
-		_paq.push(['trackAllContentImpressions']);
-
-	}
-	
-	function trackMenuSelections(filter) {
-		var cuisine = filter.cuisine;
-		var price = filter.price;
-		var rating = filter.rating;
-	
-		if(cuisine.length != 0) {
-			for(var i = 0; i < cuisine.length; i++)
-				_paq.push(['trackEvent', 'Restaurant Filter', "Cuisine Choice", cuisine[i]]);
-		}	
-		else console.log("empty");
-		
-		if(price != null) {
-			_paq.push(['trackEvent', 'Restaurant Filter', "Price Rating", price]);
-		}
-		
-		if(rating != null) {
-			_paq.push(['trackEvent', 'Restaurant Filter', "Restaurant Rating", rating]);
-		}
-	}
-	
-
-	enterUserID();
-	trackUserVisit();
-</script>
+         	_paq.push(['trackEvent', 'Drop Down Menu', selection]);
+         
+         }
+         
+         //_paq.push(['trackSiteSearch', "hello"]);
+         //_paq.push(['trackSiteSearch', "order"]);
+         enterUserID();
+         trackUserVisit();
+      </script>
       <noscript>
          <p><img src="//localhost:8070/piwik.php?idsite=2&amp;rec=1" style="border:0;" alt="" /></p>
       </noscript>
       <!-- End Matomo Code -->
    </head>
-   
    <body>
       <div class="container">
          <div class="navbar" ng-controller="NavbarController">
@@ -120,33 +127,45 @@
          <ng-view></ng-view>
       </div>
       <div class="search-container">
-         <form action="#">
+         <form>
             <input type="text" placeholder="Search.." name="search">
             <button type="submit"><i class="fa fa-search"></i></button>
          </form>
+         <form ng-submit="submit()" ng-controller="FormController">
+            Enter text and hit enter:
+            <input type="text" ng-model="text" name="text" />
+            <input type="submit" id="submit" value="Submit" />
+            <pre>You submitted: {{list}}</pre>
+         </form>
       </div>
+      <div ng-controller="DropDownMenuController">
+		  <form name="myForm">
+			<label> Select: </label>
+			<select ng-model="selection" ng-change="dropDownSelect()" ng-options="x for x in options"></select>
+		  </form>
+		  <p> Selected: {{selection}}</p>
+		</div>
       <div>
-	  
-	  
-	    <!-- footer -->
-    <footer class="footer">
-    <div class="container">
-    <div class="content has-text-centered">
-		<iframe
-            style="border: 0; height: 200px; width: 500px;"
-            src="http://localhost:8070/index.php?module=CoreAdminHome&action=optOut&language=en&backgroundColor=&fontColor=&fontSize=&fontFamily=">
-         </iframe>
-    </div>
-    </div>
-    </footer>  
-         
+         <!-- footer -->
+         <footer class="footer">
+            <div class="container">
+               <div class="content has-text-centered">
+                  <iframe
+                     style="border: 0; height: 200px; width: 500px;"
+                     src="http://localhost:8070/index.php?module=CoreAdminHome&action=optOut&language=en&backgroundColor=&fontColor=&fontSize=&fontFamily=">
+                  </iframe>
+               </div>
+            </div>
+         </footer>
       </div>
-      <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular.min.js"></script>
-      <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular-resource.min.js"></script>
+      <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular.min.js"></script>
+      <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular-resource.min.js"></script>
       <script src="lib/angular/angular.js"></script>
       <script src="lib/angular/angular-resource.js"></script>
       <script src="js/app.js"></script>
       <script src="js/controllers/CheckoutController.js"></script>
+      <script src="js/controllers/DropDownMenuController.js"></script>
+      <script src="js/controllers/FormController.js"></script>
       <script src="js/controllers/CustomerController.js"></script>
       <script src="js/controllers/MenuController.js"></script>
       <script src="js/controllers/NavbarController.js"></script>

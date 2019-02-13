@@ -41,3 +41,4 @@ foodMeApp.config(function($routeProvider) {
         templateUrl: 'views/help.html'
       });
 });
+
