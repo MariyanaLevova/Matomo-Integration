@@ -3,10 +3,11 @@
    <head>
       <meta charset="utf-8">
       <title>FoodMe</title>
-      <link rel="stylesheet" href="css/app.css">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link rel="stylesheet" href="css/app.css">
       <link rel="stylesheet" href="css/bootstrap-united.css">
-      <!-- Matomo -->
+      
+	  <!-- Matomo -->
       <script type = "text/javascript" >
          var userID;
          var _paq = _paq || [];
@@ -99,8 +100,17 @@
          
          }
          
-         //_paq.push(['trackSiteSearch', "hello"]);
-         //_paq.push(['trackSiteSearch', "order"]);
+		function trackSearchWord(word) {
+			word = word.trim();
+			word = word.toLowerCase();
+         	_paq.push(['trackEvent', 'Customer Search', 'Search Keyword: ' + word]);
+			_paq.push(['trackSiteSearch', word]);
+         
+         }
+		 
+		 // specify file extensions to track on click/download
+		_paq.push(['setDownloadExtensions', "jpg|png|gif|pdf"]); // for images and pdfs
+		 		 
          enterUserID();
          trackUserVisit();
       </script>
@@ -126,27 +136,29 @@
          </div>
          <ng-view></ng-view>
       </div>
+	  <!-- force Matomo to consider a link as a download -->
+	  <a href='#/how-it-works' class='piwik_download'>Link I want to track as a download</a>
+	  
+	  <!-- Search bar -->
       <div class="search-container">
-         <form>
-            <input type="text" placeholder="Search.." name="search">
-            <button type="submit"><i class="fa fa-search"></i></button>
-         </form>
-         <form ng-submit="submit()" ng-controller="FormController">
+		 
+         <form ng-submit="searchSubmit()" ng-controller="FormController">
             Enter text and hit enter:
-            <input type="text" ng-model="text" name="text" />
-            <input type="submit" id="submit" value="Submit" />
-            <pre>You submitted: {{list}}</pre>
+            <input type="text" ng-model="text" name="text" placeholder="Search.." />
+            <input type="submit" id="submit" value="Search"/>
+            <pre>Your past searches: {{list}}</pre>
          </form>
       </div>
+	  
+	  <!-- Drop down menu -->
       <div ng-controller="DropDownMenuController">
-		  <form name="myForm">
+		  <form>
 			<label> Select: </label>
-			<select ng-model="selection" ng-change="dropDownSelect()" ng-options="x for x in options"></select>
+			<select ng-model="selectedValue" ng-change="dropDownSelect()" ng-options="x for x in options"></select>
 		  </form>
-		  <p> Selected: {{selection}}</p>
 		</div>
       <div>
-         <!-- footer -->
+         <!-- Footer -->
          <footer class="footer">
             <div class="container">
                <div class="content has-text-centered">
@@ -158,8 +170,7 @@
             </div>
          </footer>
       </div>
-      <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular.min.js"></script>
-      <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular-resource.min.js"></script>
+
       <script src="lib/angular/angular.js"></script>
       <script src="lib/angular/angular-resource.js"></script>
       <script src="js/app.js"></script>

@@ -1,13 +1,11 @@
 'use strict';
 
-foodMeApp.controller("DropDownMenuController", ['$scope', function($scope) {
-   $scope.options = ['Option A', 'Option B', 'Option C'];
-   $scope.selection = "";
-   $scope.temp = "";
+foodMeApp.controller('DropDownMenuController',
+    function DropDownMenuController($scope) {
+		
+   $scope.options = ['Option A', 'Option B', 'Option C','Option D'];
    $scope.dropDownSelect = function() {
-	   if($scope.selection != "" && $scope.selection != $scope.temp) {
-			trackDropDownSelection($scope.selection);
-			$scope.temp = $scope.selection;
-	   }
+		trackDropDownSelection($scope.selectedValue);
    }
-}]);
+  
+});
