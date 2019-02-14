@@ -57,11 +57,9 @@
          function trackUserInteractions(url) {
          
          	var hash = url.substring(url.lastIndexOf("/") + 1, url.length);
-         	if (url.substring(url.lastIndexOf("/") + 1, url.length) == "") {
-         		_paq.push(['trackEvent', 'NavBar', "home"]);
+         	if (hash == "") {
          		_paq.push(["setDocumentTitle", document.domain + "/home"]);
          	} else {
-         		_paq.push(['trackEvent', 'NavBar', hash]);
          		_paq.push(["setDocumentTitle", document.domain + "/" + hash]);
          
          	}
@@ -86,11 +84,11 @@
          	else console.log("empty");
          	
          	if(price != null) {
-         		_paq.push(['trackEvent', 'Restaurant Filter', "Price Rating", price]);
+         		_paq.push(['trackEvent', 'Restaurant Filter', "Price Rating", "Price out of 5: " + price]);
          	}
          	
          	if(rating != null) {
-         		_paq.push(['trackEvent', 'Restaurant Filter', "Restaurant Rating", rating]);
+         		_paq.push(['trackEvent', 'Restaurant Filter', "Restaurant Rating", "Rating out of 5: " + rating]);
          	}
          }
 		 
@@ -103,7 +101,6 @@
 		function trackSearchWord(word) {
 			word = word.trim();
 			word = word.toLowerCase();
-         	_paq.push(['trackEvent', 'Customer Search', 'Search Keyword: ' + word]);
 			_paq.push(['trackSiteSearch', word]);
          
          }
